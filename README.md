@@ -13,6 +13,7 @@ fatal: failed to write commit object
 ```
 I was never prompted for the passphrase in VS Code when trying to commit.
 The solution seems to have been to make a commit in VS Code's terminal.
+	__Update:__ That stopped working after several hours.
 
 ---
 
