@@ -5,6 +5,13 @@ Create a React Component that consumes the DarkSky Weather API - [Powered by Dar
 
 
 
+## Issues with GPG in VS Code
+Initially I was getting the error even after checking the __Enable Commit Signing__ in the VS Code settings:
+```
+error: gpg failed to sign the data
+fatal: failed to write commit object
+```
+
 
 ---
 
