@@ -11,7 +11,8 @@ Initially I was getting the error even after checking the __Enable Commit Signin
 error: gpg failed to sign the data
 fatal: failed to write commit object
 ```
-
+I was never prompted for the passphrase in VS Code when trying to commit.
+The solution seems to have been to make a commit in VS Code's terminal.
 
 ---
 
