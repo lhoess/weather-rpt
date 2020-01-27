@@ -1,7 +1,8 @@
 # Weather Report
 Create a React Component that consumes the DarkSky Weather API - [Powered by Dark Sky](https://darksky.net/poweredby/)
 
-
+##OpenWeather
+Switch to using OpenWeather API because of having to setup a proxy because of CORS with DarkSky.
 
 
 
