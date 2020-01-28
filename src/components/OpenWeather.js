@@ -1,6 +1,9 @@
 import React, { useState, useEffect, Fragment } from 'react';
+import Card from 'react-bootstrap/Card'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-//API 5cfbeb9c5a0a0ba58e68f01c0c9a4d9b
 const APPID="5cfbeb9c5a0a0ba58e68f01c0c9a4d9b"
 const baseUrl ="http://api.openweathermap.org/data/2.5/weather?units=imperial&APPID="+APPID
 const lat = "39.75"
@@ -19,7 +22,7 @@ const getWeatherRpt = async(url) => {
 const showWx = ({id, main, description},wxIcon) => {
 	return (
 	 	<div>
-		 <i>
+		  <i>
 				<img src= {wxIcon} alt={main}/>
 			</i>
 			<div><strong>Description: </strong>{description}
@@ -62,8 +65,8 @@ function OpenWeather(props){
 	let location = props ? props.loc : 'Denver, us'
 	let locationURL = baseUrl+'&q='+location
 	let locationLatLon = baseUrl+'&lat='+lat+'&lon='+long
-	// console.log("URL", locationURL)
-	// console.log("URL Lat/Long", locationLatLon)
+	console.log("URL", locationURL)
+	console.log("URL Lat/Long", locationLatLon)
 
 	useEffect( () => {
 			// You can await here
@@ -81,33 +84,40 @@ function OpenWeather(props){
 			fetchData();
 		}, [locationLatLon]); // Or [] if effect doesn't need props or state
 
+		// Convert object to Array with new ES2017 methods
+		// let testArray = Object.entries(weather)
+		// console.log("Test Array", testArray)
 	return (
+		<Row>
+			<Col sm={4}>
 
-    <div key={data.id} style={{width:"40%"}}>
+				<Card key={data.id}>
 
-			<h2>Weather Data for {data.name} </h2>
-			{showLoc(coord)}
-			{showWx(weather,wxIcon)}
-			{showTemp(temp)}
-			{showWind(wind)}
+				<Card.Header>Weather Data for {data.name} </Card.Header>
+					{showLoc(coord)}
+					{showWx(weather,wxIcon)}
+					{showTemp(temp)}
+					{showWind(wind)}
 
 
-			{/* <div>
-        <br></br>visibility {data.visibility} ID: {data.id}
-			</div> */}
-			{/* <pre>
-			{JSON.stringify( data)}
-				<br></br>
+					{/* <div>
+						<br></br>visibility {data.visibility} ID: {data.id}
+					</div> */}
+					{/* <pre>
+					{JSON.stringify( data)}
+						<br></br>
 
-			<strong>data.main</strong>
-				{JSON.stringify( data.coord)}
-				<br></br>
-				<strong>data.weather</strong>
-				{JSON.stringify( data.weather)}
+					<strong>data.main</strong>
+						{JSON.stringify( data.coord)}
+						<br></br>
+						<strong>data.weather</strong>
+						{JSON.stringify( data.weather)}
 
-			</pre> */}
+					</pre> */}
 
-    </div>
+				</Card>
+			</Col>
+		</Row>
   );
 
 
