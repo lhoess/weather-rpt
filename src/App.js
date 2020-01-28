@@ -1,26 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Container} from 'react-bootstrap'
+import Alert from 'react-bootstrap/Alert'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import { FaDev,FaExclamation } from "react-icons/fa";
+// import logo from './logo.svg';
 // import DarkSky from './components/DarkSky'
 import OpenWeather from './components/OpenWeather'
 function App() {
 // 	let weather = OpenWeather();
 // console.log("App:Weather", weather)
   return (
+		<Container fluid>
+		<Alert key={process.env.NODE_ENV} variant={'danger'}>
+		<FaExclamation />		Environment: {process.env.NODE_ENV}  <FaDev />
+		</Alert>
     <div className="App">
-			<div style={{backgroundColor:'firebrick', fontWeight:'bold', padding:'10px', color:'gold'}}>Environment: {process.env.NODE_ENV}</div>
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header> */}
-
 			<OpenWeather loc='Lakewood,us' />
     </div>
+		</Container>
   );
 }
 console.log("NODE END: ", process.env.NODE_ENV)
