@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form } from 'react-bootstrap';
 
 const APPID="5cfbeb9c5a0a0ba58e68f01c0c9a4d9b"
 const baseUrl ="http://api.openweathermap.org/data/2.5/weather?units=imperial&APPID="+APPID
@@ -90,10 +91,17 @@ function OpenWeather(props){
 	return (
 		<Row>
 			<Col sm={4}>
+				<Card>
+					<Card.Header>Check Weather</Card.Header>
+					<p>Check weather at another location.</p>
+					<Form>
 
+					</Form>
+				</Card>
+			</Col>
+			<Col sm={4}>
 				<Card key={data.id}>
-
-				<Card.Header>Weather Data for {data.name} </Card.Header>
+				<Card.Header><h2>Weather for {data.name} </h2></Card.Header>
 					{showLoc(coord)}
 					{showWx(weather,wxIcon)}
 					{showTemp(temp)}
