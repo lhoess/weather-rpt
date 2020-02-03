@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Card from 'react-bootstrap/Card'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Form } from 'react-bootstrap';
 
@@ -11,15 +12,6 @@ const lat = "39.75"
 const long = "-104.97"
 const decoder = new TextDecoder('utf-8')
 
-
-const getWeatherRpt = async(url) => {
-	const fetchWx = await fetch(url)
-	const reader = await fetchWx.body.getReader()
-	let {value: result, done: readerDone} = await reader.read();
-	result = result ? decoder.decode(result) : "";
-	// console.log("Final Result", result)
-	return result;
-}
 const showWx = ({id, main, description},wxIcon) => {
 	return (
 	 	<div>
@@ -56,52 +48,95 @@ const showLoc = ({lat, lon}) =>{
 	 )
 }
 
-function OpenWeather(props){
+const getWeatherRpt = async(location) => {
+	const url = ( location.split(',').length>1) ? `${baseUrl}&q=${location}` : `${baseUrl}&q=${location},us`
+	console.log("****** URL: useState ****", url)
+	const fetchWx = await fetch(url)
+	const reader = await fetchWx.body.getReader()
+	let {value: result, done: readerDone} = await reader.read();
+	result = result ? decoder.decode(result) : "";
+	// console.log("Final Result", result)
+	return result;
+}
+const OpenWeather = () => {
+	// const [submitted, setSubmit] = useState(false)
 	const [data, setData] = useState([])
 	const [coord, setCoord] = useState([])
+	const [location,setLocation] = useState('Denver,us')
 	const [weather, setWeather] = useState([])
 	const [temp,setTemp] = useState([])
 	const [wind,setWind] = useState([])
 	const [wxIcon,setWxicon] = useState([])
-	let location = props ? props.loc : 'Denver, us'
-	let locationURL = baseUrl+'&q='+location
-	let locationLatLon = baseUrl+'&lat='+lat+'&lon='+long
-	console.log("URL", locationURL)
-	console.log("URL Lat/Long", locationLatLon)
 
+	// let location = props ? props.loc : 'Denver,us'
+	// let locationURL = `${baseUrl}&q=${location}`
+	// let locationLatLon = baseUrl+'&lat='+lat+'&lon='+long
+	//
+	// console.log("URL Lat/Long", locationLatLon)
 	useEffect( () => {
+			let response;
 			// You can await here
 			const fetchData = async () => {
-				const response = await getWeatherRpt(locationLatLon);
-				// console.log("JSON Response", JSON.parse(response))
-				setData(JSON.parse(response));
-				setTemp(JSON.parse(response).main);
-				setCoord(JSON.parse(response).coord)
-				setWxicon("http://openweathermap.org/img/wn/"+JSON.parse(response).weather[0].icon+"@2x.png")
-				setWeather(JSON.parse(response).weather[0])
-				setWind(JSON.parse(response).wind)
+				try{
+					response = await getWeatherRpt(location);
+				} catch(error){
+					console.error(error)
+				}
+			// console.log("JSON Response", JSON.parse(response))
+			// setSubmit(true)
+			setData(JSON.parse(response));
+			setTemp(JSON.parse(response).main);
+			setCoord(JSON.parse(response).coord)
+			setWxicon("http://openweathermap.org/img/wn/"+JSON.parse(response).weather[0].icon+"@2x.png")
+			setWeather(JSON.parse(response).weather[0])
+			setWind(JSON.parse(response).wind)
 
-			}
+		}
 			fetchData();
-		}, [locationLatLon]); // Or [] if effect doesn't need props or state
+		}, [location]); // Or [] if effect doesn't need props or state
 
 		// Convert object to Array with new ES2017 methods
 		// let testArray = Object.entries(weather)
 		// console.log("Test Array", testArray)
 	return (
 		<Row>
-			<Col sm={4}>
-				<Card>
+			<Col sm={4} >
+				<Card className="p-2">
 					<Card.Header>Check Weather</Card.Header>
 					<p>Check weather at another location.</p>
-					<Form>
-
+					<Form onSubmit={e => {
+						// let form = e.target
+						// console.log("E",e.target)
+						// console.log("Location",e.target.elements.location.value)
+						e.preventDefault();
+						setLocation(e.target.elements.location.value)
+						// getWeatherRpt();
+					}}>
+						<Form.Group as={Row} controlId="location">
+						<Form.Label column sm="2">City</Form.Label>
+						<Col>
+							<Form.Control size="sm" type="text" placeholder="Enter a US City" />
+							{/* onBlur={event => setLocation(event.target.value)}  */}
+							<Form.Text className="text-muted">
+								Enter the name of your city.
+							</Form.Text>
+						</Col>
+						{/* onChange={event => setLocation(event.target.value)} */}
+						<Col sm={3}>
+						<Button variant="primary" type="submit" size="sm"  >
+							Submit
+						</Button>
+						</Col>
+						</Form.Group>
 					</Form>
 				</Card>
 			</Col>
+
+			{/* Display Weather */}
+
 			<Col sm={4}>
-				<Card key={data.id}>
-				<Card.Header><h2>Weather for {data.name} </h2></Card.Header>
+				<Card key={data.id}  className="pb-4">
+				<Card.Header className="mb-3"><h2>Weather for {data.name} </h2></Card.Header>
 					{showLoc(coord)}
 					{showWx(weather,wxIcon)}
 					{showTemp(temp)}
